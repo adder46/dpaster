@@ -1,0 +1,4 @@
+[run]
+omit =
+    */dpaster/__main__.py
+    */dpaster/__init__.py

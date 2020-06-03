@@ -1,0 +1,22 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "dpaster"
+author = "adder46"
+author-email = "dedmauz69@gmail.com"
+home-page = "https://github.com/adder46/dpaster"
+description-file = "README.md"
+requires-python = ">=3.4"
+keywords = "client interface dpaste pastebin"
+requires = [
+    "requests",
+    "click",
+    "pygments",
+    "pyperclip"
+]
+dist-name = "thepaster"
+
+[tool.flit.scripts]
+dpaster = "dpaster.application:cli"
