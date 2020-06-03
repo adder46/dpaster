@@ -1,0 +1,22 @@
+language: python
+python:
+- '3.5'
+- '3.6'
+- '3.7'
+install:
+- pip install --upgrade setuptools
+- pip install python-coveralls
+- pip install tox
+- pip install tox-travis
+script:
+- tox
+deploy:
+  provider: pypi
+  user: adder46
+  password:
+    secure: ESVqij56G5OBuSvXdRSLFKlZbScAMnQXHZRGnAZ0otOMeOmNGZ2Nh8cw99dss6Z72PGQWpfG11Id67Kbnf8tz++P6AOuYFVy8HHbryVya6E0gKjFbIDEBjBSuegU+sF5TQdZa7ZZIAIk51uMP3vN/WvaBB4Of9lUjI+DCDkFc/g2uBKmfcm7hHX8slbUqr/6w4+nkpzXqLmFBfwD5AQyUuqIZWl+EfnnccVQEeDN/3e/M3PNB5whfwiTUO44i3KGM8WeHfzaAYLRY2tZsZAZyQVJ2XfBj/l+4OYqiuCfqBTbGvB+xqyvJt7PolTgzGAHAk9/E4PZNeVkD2K+5BqI9a+Sh/xk4mLbeU+Qubq5temWDYZRq+clfSdcJNpFq6bt37Oxks1HmleYvabYptNiZ45cA0N8h9IZvMtUPMvPhjhrk2O4UBadIj4+pGNTGuaWAc2X8FOOE9Q1H1sCLIQp4nY6cdxkcx+HtqTkVf7jt/nuVFUoIKq//Iehc2lrCRTWtLxdc++jjGwM3UndKu9AmyQ1DCU+8Lh743qgDIS48Q1i3cd014+/KIYwPQccqQoprv0H6OyIc+9dLDyrbG/0DCyHnfnZLrX3r6XG+KGEWoAm9rDR7/va8UnCQCwuu4bZdx8WvHOwWOgPcZbaxb2R4E3mIaihdPfoEMO2pbE2xxo=
+  skip_existing: true
+  on:
+    tags: true
+after_success:
+- coveralls
