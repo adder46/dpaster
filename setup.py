@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name='thepaster',
-    version='1.1.1',
+    version='2.0.0',
     author='adder46',
     author_email='dedmauz69@gmail.com',
     description=('client interface for https://dpaste.org/ pastebin'),
