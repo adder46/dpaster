@@ -48,6 +48,7 @@ def cli(ctx):
 #     metavar="OPT"
 # )
 @click.argument('file', type=click.File("r"), default="-", required=False)
+# def paste(file, lexer, expires, raw):
 def paste(file, lexer, expires):
     """
     Paste to dpaste.org
