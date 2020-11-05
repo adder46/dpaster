@@ -6,12 +6,12 @@ def read(fname):
 
 setup(
     name='thepaster',
-    version='2.0.0',
+    version='3.0.0',
     author='adder46',
     author_email='dedmauz69@gmail.com',
-    description=('client interface for https://dpaste.org/ pastebin'),
+    description=('client interface for https://dpaste.com/ pastebin'),
     license='MIT',
-    keywords='client interface for https://dpaste.org/ pastebin',
+    keywords='client interface for https://dpaste.com/ pastebin',
     url='https://github.com/adder46/dpaster',
     packages=['dpaster'],
     long_description=read('README.md'),
