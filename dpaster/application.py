@@ -16,7 +16,7 @@ CONF_PATH = os.path.join(os.path.expanduser("~/.config"), "dpaster", "dpaster.co
 @click.group()
 @click.pass_context
 @click.version_option(__version__)
-def cli(ctx):
+def cli(ctx): # pylint: disable=unused-argument
     """
     Client interface for https://dpaste.com/ pastebin
     """
@@ -81,7 +81,7 @@ def paste(file, syntax, expires, title, raw):
     )
 
     req.raise_for_status()
-      
+
     url = req.text.strip()
 
     if raw or options.get("enable_raw"):
