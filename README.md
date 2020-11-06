@@ -1,8 +1,8 @@
 # dpaster
 
-[![Build Status](https://travis-ci.org/adder46/dpaster.svg?branch=master)](https://travis-ci.org/adder46/dpaster) [![Coverage Status](https://coveralls.io/repos/github/adder46/dpaster/badge.svg?branch=master)](https://coveralls.io/github/adder46/dpaster?branch=master) [![PyPI version](https://badge.fury.io/py/thepaster.svg)](https://pypi.org/project/thepaster/2.0.0/) [![PyPI](https://img.shields.io/badge/status-stable-brightgreen.svg)](https://pypi.org/project/thepaster/2.0.0/) 
+[![Build Status](https://travis-ci.org/adder46/dpaster.svg?branch=master)](https://travis-ci.org/adder46/dpaster) [![Coverage Status](https://coveralls.io/repos/github/adder46/dpaster/badge.svg?branch=master)](https://coveralls.io/github/adder46/dpaster?branch=master) [![PyPI version](https://badge.fury.io/py/thepaster.svg)](https://pypi.org/project/thepaster/3.0.2/) [![PyPI](https://img.shields.io/badge/status-stable-brightgreen.svg)](https://pypi.org/project/thepaster/3.0.2/)
 
-**dpaster** is a command-line client interface for [dpaste](https://dpaste.org/).
+**dpaster** is a command-line client interface for [dpaste](https://dpaste.com/).
 
 ## Installing dpaster
 
@@ -16,7 +16,7 @@ pip install thepaster
 $ dpaster --help
 Usage: dpaster [OPTIONS] COMMAND [ARGS]...
 
-  Client interface for https://dpaste.org/ pastebin
+  Client interface for https://dpaste.com/ pastebin
 
 Options:
   --version  Show the version and exit.
@@ -24,7 +24,7 @@ Options:
 
 Commands:
   config  Configure available settings
-  paste   Paste to dpaste.org
+  paste   Paste to dpaste.com
 ```
 
 ## Configuring dpaster
@@ -39,12 +39,11 @@ Options:
   --show                          View current settings
   --enable-autocp / --disable-autocp
                                   Automatically copy the URL to clipboard
-  --default-lexer OPT             Choose default lexer (e.g. python, java,
+  --enable-raw / --disable-raw    Always get raw URL
+  --default-syntax OPT            Choose default syntax (e.g. python, java,
                                   bash)
 
-  --default-expires OPT           Choose default expiry time (e.g. onetime,
-                                  hour, day, week)
-
+  --default-expires OPT           Choose default expiry time in days (e.g. 10)
   --help                          Show this message and exit.
 ```
 
