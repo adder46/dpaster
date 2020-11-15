@@ -94,11 +94,7 @@ def test_get_syntax():
     """
 
     assert get_syntax(filename, content) == 'python'
-
     filename = "bla"
-
     assert get_syntax(filename, content) == 'text'
-
     filename = "<stdin>"
-
     assert get_syntax(filename, content) == 'mime'

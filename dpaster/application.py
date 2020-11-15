@@ -1,5 +1,5 @@
 import json
-import os
+import pathlib
 
 import click
 import pygments.lexers
@@ -10,7 +10,7 @@ import requests
 from dpaster import __version__
 
 
-CONF_PATH = os.path.join(os.path.expanduser("~/.config"), "dpaster", "dpaster.conf")
+CONF_PATH = pathlib.Path("~/.config").expanduser() / "dpaster" / "dpaster.conf"
 
 
 @click.group()
@@ -58,7 +58,7 @@ def paste(file, syntax, expires, title, raw):
         with open(CONF_PATH, "r") as conf_file:
             options = json.load(conf_file)
     except FileNotFoundError:
-        os.makedirs(os.path.dirname(CONF_PATH), exist_ok=True)
+        pathlib.Path.mkdir(CONF_PATH.parent, exist_ok=True)
         with open(CONF_PATH, "w") as conf_file:
             options = {
                 "enable_autocp": False,
