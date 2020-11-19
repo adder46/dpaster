@@ -1,15 +1,23 @@
-[tool.flit.metadata]
-module = "dpaster"
-author = "adder46"
-author-email = "dedmauz69@gmail.com"
-home-page = "https://github.com/adder46/dpaster"
-description-file = "README.md"
-requires-python = ">=3.6"
-keywords = "client interface dpaste pastebin"
-requires = [
-    "requests",
-    "click",
-    "pygments",
-    "pyperclip"
-]
-dist-name = "thepaster"
+[tool.poetry]
+name = "dpaster"
+version = "3.1.0"
+description = "Command-line client interface for https://dpaste.com/ pastebin"
+authors = ["adder46 <dedmauz69@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+pyperclip = "^1.8.1"
+Pygments = "^2.7.2"
+requests = "^2.25.0"
+click = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+tox = "^3.20.1"
+poetry = "^1.1.4"
+mypy = "^0.790"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
