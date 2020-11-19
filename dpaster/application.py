@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import IO, Optional
 
 import click
 import pygments.lexers
@@ -16,7 +17,7 @@ CONF_PATH = pathlib.Path("~/.config").expanduser() / "dpaster" / "dpaster.conf"
 @click.group()
 @click.pass_context
 @click.version_option(__version__)
-def cli(ctx): # pylint: disable=unused-argument
+def cli(ctx: click.Context) -> None: # pylint: disable=unused-argument
     """
     Client interface for https://dpaste.com/ pastebin
     """
@@ -26,7 +27,8 @@ def cli(ctx): # pylint: disable=unused-argument
     "--syntax", "-s",
     help="Choose syntax (e.g. python, java, bash)",
     required=False,
-    metavar="OPT"
+    metavar="OPT",
+    type=str
 )
 @click.option(
     "--expires", "-e",
@@ -50,7 +52,7 @@ def cli(ctx): # pylint: disable=unused-argument
     metavar="OPT"
 )
 @click.argument('file', type=click.File("r"), default="-", required=False)
-def paste(file, syntax, expires, title, raw):
+def paste(file: IO, syntax: str, expires: int, title: str, raw: bool) -> None:
     """
     Paste to dpaste.org
     """
@@ -82,7 +84,7 @@ def paste(file, syntax, expires, title, raw):
 
     req.raise_for_status()
 
-    url = req.text.strip()
+    url: str = req.text.strip()
 
     if raw or options.get("enable_raw"):
         url += ".txt"
@@ -120,7 +122,13 @@ def paste(file, syntax, expires, title, raw):
     metavar="OPT",
     type=int
 )
-def config(show, enable_autocp, enable_raw, default_syntax, default_expires):
+def config(
+    show: bool,
+    enable_autocp: Optional[bool],
+    enable_raw: Optional[bool],
+    default_syntax: str,
+    default_expires: int
+) -> None:
     """
     Configure available settings
     """
@@ -150,7 +158,7 @@ def config(show, enable_autocp, enable_raw, default_syntax, default_expires):
         json.dump(options, conf_file)
 
 
-def get_syntax(filename, content):
+def get_syntax(filename: str, content: str) -> str:
     if filename != "<stdin>":
         try:
             syntax = pygments.lexers.guess_lexer_for_filename(filename, content)
