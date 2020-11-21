@@ -3,6 +3,7 @@ import pathlib
 from typing import IO, Optional
 
 import click
+import click_aliases
 import pygments.lexers
 import pygments.util
 import pyperclip
@@ -14,7 +15,7 @@ from dpaster import __version__
 CONF_PATH = pathlib.Path("~/.config").expanduser() / "dpaster" / "dpaster.conf"
 
 
-@click.group()
+@click.group(cls=click_aliases.ClickAliasedGroup)
 @click.pass_context
 @click.version_option(__version__)
 def cli(ctx: click.Context) -> None: # pylint: disable=unused-argument
@@ -22,7 +23,7 @@ def cli(ctx: click.Context) -> None: # pylint: disable=unused-argument
     Client interface for https://dpaste.com/ pastebin
     """
 
-@cli.command()
+@cli.command(aliases=['p'])
 @click.option(
     "--syntax", "-s",
     help="Choose syntax (e.g. python, java, bash)",
@@ -51,10 +52,17 @@ def cli(ctx: click.Context) -> None: # pylint: disable=unused-argument
     required=False,
     metavar="OPT"
 )
+@click.option(
+    "--copy", "-c",
+    is_flag=True,
+    help="Copy URL to clipboard",
+    required=False,
+    metavar="OPT"
+)
 @click.argument('file', type=click.File("r"), default="-", required=False)
-def paste(file: IO, syntax: str, expires: int, title: str, raw: bool) -> None:
+def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool) -> None:
     """
-    Paste to dpaste.org
+    Paste to dpaste.com
     """
     try:
         with open(CONF_PATH, "r") as conf_file:
@@ -91,10 +99,11 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool) -> None:
 
     click.echo(url)
 
-    if options["enable_autocp"]:
+    if copy or options["enable_autocp"]:
         pyperclip.copy(url)
 
-@cli.command()
+
+@cli.command(aliases=['c'])
 @click.option(
     "--show",
     is_flag=True,
@@ -126,8 +135,8 @@ def config(
     show: bool,
     enable_autocp: Optional[bool],
     enable_raw: Optional[bool],
-    default_syntax: str,
-    default_expires: int
+    default_syntax: Optional[str],
+    default_expires: Optional[int]
 ) -> None:
     """
     Configure available settings
@@ -137,11 +146,11 @@ def config(
             options = json.load(conf_file)
             for key, value in options.items():
                 print("{}: {}".format(key, value))
-            return
+            return None
 
     if all(x is None for x in {enable_autocp, enable_raw, default_syntax, default_expires}):
         click.echo("Try 'dpaster config --help' for help")
-        return
+        return None
 
     with open(CONF_PATH, "r") as conf_file:
         options = json.load(conf_file)
