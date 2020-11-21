@@ -58,3 +58,6 @@ venv.bak/
 # Travis
 *input.txt
 *travis.log
+
+# poetry
+*.lock
