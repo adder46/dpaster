@@ -1,4 +1,6 @@
 [run]
+source = dpaster
 omit =
-    */dpaster/__main__.py
-    */dpaster/__init__.py
+    tests/*
+    dpaster/__main__.py
+    dpaster/__init__.py

@@ -71,11 +71,12 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         pathlib.Path.mkdir(CONF_PATH.parent, exist_ok=True)
         with open(CONF_PATH, "w") as conf_file:
             options = {
-                "enable_autocp": False,
-                "enable_raw": False,
-                "default_syntax": None,
-                "default_expires": None
+                "enable-autocp": False,
+                "enable-raw": False,
+                "default-syntax": None,
+                "default-expires": None
             }
+            print("in with")
             json.dump(options, conf_file)
 
     content = file.read()
@@ -144,9 +145,9 @@ def config(
     if show:
         with open(CONF_PATH, "r") as conf_file:
             options = json.load(conf_file)
-            for key, value in options.items():
-                print("{}: {}".format(key, value))
-            return None
+        for key, value in options.items():
+            click.echo("{}: {}".format(key, value))
+        return None
 
     if all(x is None for x in {enable_autocp, enable_raw, default_syntax, default_expires}):
         click.echo("Try 'dpaster config --help' for help")
@@ -155,10 +156,10 @@ def config(
     with open(CONF_PATH, "r") as conf_file:
         options = json.load(conf_file)
         for name, value in {
-            "enable_autocp": enable_autocp,
-            "enable_raw": enable_raw,
-            "default_syntax": default_syntax,
-            "default_expires": default_expires
+            "enable-autocp": enable_autocp,
+            "enable-raw": enable_raw,
+            "default-syntax": default_syntax,
+            "default-expires": default_expires
         }.items():
             if value is not None:
                 options[name] = value
@@ -176,7 +177,7 @@ def get_syntax(filename: str, content: str) -> str:
     else:
         try:
             syntax = pygments.lexers.guess_lexer(content)
-        except pygments.util.ClassNotFound:
+        except pygments.util.ClassNotFound: # pragma: no cover
             return "text"
     return {
         'ABAP': 'abap',
