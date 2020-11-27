@@ -2,7 +2,7 @@ import random
 import string
 
 from dpaster import application
-from tests.fixtures import python_code # pylint: disable=unused-import
+from tests.fixtures import python_code  # pylint: disable=unused-import
 
 
 def test_get_syntax_stdin(python_code):
@@ -20,12 +20,10 @@ def test_get_syntax_weird_filename():
 def test_get_syntax_weird_content():
     random.seed(123)
     content = "".join(
-        ch for ch in [
-            random.choice(
-                string.ascii_letters +
-                string.digits +
-                r"!@#$%^&*()_+-=[]{}\/"
-            ) for _ in range(100)
+        ch
+        for ch in [
+            random.choice(string.ascii_letters + string.digits + r"!@#$%^&*()_+-=[]{}\/")
+            for _ in range(100)
         ]
     )
     assert application.get_syntax("<stdin>", content) == "text"

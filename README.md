@@ -4,15 +4,15 @@
 
 **dpaster** is a command-line client interface for [dpaste](https://dpaste.com/).
 
-## Installing dpaster
+## Installation
 
-```sh
+```
 pip install thepaster
 ```
 
-## Using dpaster
+## Usage
 
-```sh
+```
 $ dpaster --help
 Usage: dpaster [OPTIONS] COMMAND [ARGS]...
 
@@ -27,9 +27,9 @@ Commands:
   paste (p)   Paste to dpaste.com
 ```
 
-## Configuring dpaster
+## Configuring
 
-```sh
+```
 $ dpaster config --help
 Usage: dpaster config [OPTIONS]
 
@@ -45,6 +45,40 @@ Options:
 
   --default-expires OPT           Choose default expiry time in days (e.g. 10)
   --help                          Show this message and exit.
+```
+
+## Development
+
+You will need [poetry](https://github.com/python-poetry/poetry), preferably with these options in config:
+
+```toml
+virtualenvs.create = true
+virtualenvs.in-project = true
+```
+
+Then clone the repo, cd into it, make a venv, activate it, and install the project:
+
+```sh
+git clone https://github.com/adder46/dpaster
+cd dpaster
+poetry env use python3
+. .venv/bin/activate
+poetry install
+```
+
+To run tests, mypy checks, and style checks, you need to have Pythons:
+
+- 3.6
+- 3.7
+- 3.8
+- 3.9
+
+For installing all the Python versions, I recommend [pyenv](https://github.com/pyenv/pyenv).
+
+Once you have them, run:
+
+```
+tox
 ```
 
 ## Licensing

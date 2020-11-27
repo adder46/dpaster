@@ -7,8 +7,11 @@ import pytest
 
 from dpaster import application
 from tests.fixtures import (
-    config, default_options, fake_requests,
-    fake_pyperclip, python_code
+    config,
+    default_options,
+    fake_requests,
+    fake_pyperclip,
+    python_code,
 )
 
 
@@ -22,13 +25,16 @@ from tests.fixtures import (
         ["--raw"],
         ["--copy"],
         [
-            "--syntax", "java",
-            "--expires", 10,
-            "--title", "Another title",
+            "--syntax",
+            "java",
+            "--expires",
+            10,
+            "--title",
+            "Another title",
             "--raw",
-            "--copy"
-        ]
-    ]
+            "--copy",
+        ],
+    ],
 )
 def test_paste(arguments, config, default_options, fake_requests, fake_pyperclip):
     runner = CliRunner()

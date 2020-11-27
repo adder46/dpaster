@@ -4,7 +4,7 @@ from click.testing import CliRunner
 import pytest
 
 from dpaster import application
-from tests.fixtures import config, default_options # pylint: disable=unused-import
+from tests.fixtures import config, default_options  # pylint: disable=unused-import
 
 
 @pytest.mark.parametrize(
@@ -13,14 +13,14 @@ from tests.fixtures import config, default_options # pylint: disable=unused-impo
         ["--enable-autocp", True],
         ["--enable-raw", True],
         ["--default-expires", 10],
-        ["--default-syntax", "python"]
-    ]
+        ["--default-syntax", "python"],
+    ],
 )
 def test_config_setting_options(option, value, config, default_options):
     runner = CliRunner()
     runner.invoke(
         application.config,
-        [option] + [value] if not isinstance(value, bool) else [option]
+        [option] + [value] if not isinstance(value, bool) else [option],
     )
     with open(config, "r") as f:
         options = json.load(f)
