@@ -13,6 +13,7 @@ class FakeRequests:
 
 class FakeResponse:
     text = "http://dpaste.com/"
+
     def raise_for_status(self):
         pass
 
@@ -25,11 +26,7 @@ class FakePyperclip:
 @pytest.fixture
 def config(monkeypatch, tmp_path):
     config_path = tmp_path / "dpaster.conf"
-    monkeypatch.setattr(
-        application,
-        "CONF_PATH",
-        config_path
-    )
+    monkeypatch.setattr(application, "CONF_PATH", config_path)
     return config_path
 
 
@@ -39,7 +36,7 @@ def default_options(config):
         "enable-raw": False,
         "enable-autocp": False,
         "default-lexer": None,
-        "default-expires": None
+        "default-expires": None,
     }
     with open(config, "w") as f:
         json.dump(options, f)
