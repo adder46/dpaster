@@ -10,7 +10,7 @@ from tests.fixtures import config, default_options  # pylint: disable=unused-imp
 @pytest.mark.parametrize(
     "option, value",
     [
-        ["--enable-autocp", True],
+        ["--enable-cp", True],
         ["--enable-raw", True],
         ["--default-expires", 10],
         ["--default-syntax", "python"],

@@ -42,7 +42,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         Path.mkdir(CONF_PATH.parent, exist_ok=True)
         with open(CONF_PATH, "w") as conf_file:
             options = {
-                "enable-autocp": False,
+                "enable-cp": False,
                 "enable-raw": False,
                 "default-syntax": None,
                 "default-expires": None,
@@ -58,9 +58,9 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
             "title": title,
             "content": content,
             "syntax": (
-                syntax or options.get("default_syntax") or get_syntax(file.name, content)
+                syntax or options.get("default-syntax") or get_syntax(file.name, content)
             ),
-            "expiry_days": expires or options.get("default_expires"),
+            "expiry_days": expires or options.get("default-expires"),
         },
     )
 
@@ -68,42 +68,24 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
 
     url: str = req.text.strip()
 
-    if raw or options.get("enable_raw"):
+    if raw or options.get("enable-raw"):
         url += ".txt"
 
     click.echo(url)
 
-    if copy or options["enable_autocp"]:
+    if copy or options["enable-cp"]:
         pyperclip.copy(url)
 
 
 @cli.command(aliases=["c"])
-@click.option("--show", is_flag=True, help="View current settings")
-@click.option(
-    "--enable-autocp/--disable-autocp",
-    default=None,
-    help="Automatically copy the URL to clipboard",
-)
-@click.option(
-    "--enable-raw/--disable-raw",
-    default=None,
-    help="Always get raw URL",
-    metavar="OPT",
-)
-@click.option(
-    "--default-syntax",
-    help="Choose default syntax (e.g. python, java, bash)",
-    metavar="OPT",
-)
-@click.option(
-    "--default-expires",
-    help="Choose default expiry time in days (e.g. 10)",
-    metavar="OPT",
-    type=int,
-)
+@click.option("--show", is_flag=True, help="Show current settings")
+@click.option("--enable-cp/--disable-cp", default=None, help="Copy the URL to clipboard")
+@click.option("--enable-raw/--disable-raw", default=None, help="Always get raw URL")
+@click.option("--default-syntax", help="Default syntax")
+@click.option("--default-expires", help="Default expiry time in days", type=int)
 def config(
     show: bool,
-    enable_autocp: Optional[bool],
+    enable_cp: Optional[bool],
     enable_raw: Optional[bool],
     default_syntax: Optional[str],
     default_expires: Optional[int],
@@ -118,16 +100,14 @@ def config(
             click.echo("{}: {}".format(key, value))
         return None
 
-    if all(
-        x is None for x in {enable_autocp, enable_raw, default_syntax, default_expires}
-    ):
+    if all(x is None for x in {enable_cp, enable_raw, default_syntax, default_expires}):
         click.echo("Try 'dpaster config --help' for help")
         return None
 
     with open(CONF_PATH, "r") as conf_file:
         options = json.load(conf_file)
         for name, value in {
-            "enable-autocp": enable_autocp,
+            "enable-cp": enable_cp,
             "enable-raw": enable_raw,
             "default-syntax": default_syntax,
             "default-expires": default_expires,
