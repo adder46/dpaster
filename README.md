@@ -1,14 +1,13 @@
-# pdaster
+# dpaster
 
-[![Build Status](https://travis-ci.org/adder46/dpaster.svg?branch=master)](https://travis-ci.org/adder46/dpaster) [![Coverage Status](https://coveralls.io/repos/github/adder46/dpaster/badge.svg?branch=master)](https://coveralls.io/github/adder46/dpaster?branch=master) [![PyPI version](https://badge.fury.io/py/thepaster.svg)](https://pypi.org/project/thepaster/3.2.2/) [![PyPI](https://img.shields.io/badge/status-stable-brightgreen.svg)](https://pypi.org/project/thepaster/3.2.2/)
+[![Build Status](https://travis-ci.org/adder46/dpaster.svg?branch=master)](https://travis-ci.org/adder46/dpaster) [![Coverage Status](https://coveralls.io/repos/github/adder46/dpaster/badge.svg?branch=master)](https://coveralls.io/github/adder46/dpaster?branch=master) [![PyPI version](https://badge.fury.io/py/thepaster.svg)](https://pypi.org/project/thepaster/3.3.0/) [![PyPI](https://img.shields.io/badge/status-stable-brightgreen.svg)](https://pypi.org/project/thepaster/3.2.2/)
 
 **dpaster** is a command-line client interface for [dpaste](https://dpaste.com/).
 
 ## Installation
 
-```
-pip install thepaster
-```
+This package depends on the latest version of click, which is not released yet, so it's best to clone the repo and install it with poetry.
+When the new version of click is released, **dpaster** will be available as a package on PyPI, too.
 
 ## Usage
 
@@ -36,15 +35,12 @@ Usage: dpaster config [OPTIONS]
   Configure available settings
 
 Options:
-  --show                          View current settings
-  --enable-autocp / --disable-autocp
-                                  Automatically copy the URL to clipboard
-  --enable-raw / --disable-raw    Always get raw URL
-  --default-syntax OPT            Choose default syntax (e.g. python, java,
-                                  bash)
-
-  --default-expires OPT           Choose default expiry time in days (e.g. 10)
-  --help                          Show this message and exit.
+  --show                        Show current settings
+  --enable-cp / --disable-cp    Copy the URL to clipboard
+  --enable-raw / --disable-raw  Always get raw URL
+  --default-syntax TEXT         Default syntax
+  --default-expires INTEGER     Default expiry time in days
+  --help                        Show this message and exit.
 ```
 
 ## Development
