@@ -149,6 +149,8 @@ disable=print-statement,
         too-few-public-methods,
         redefined-outer-name,
         unsubscriptable-object,
+        unused-import,
+        duplicate-code,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -382,7 +384,8 @@ good-names=i,
            Run,
            _,
            f,
-           m
+           m,
+           rm
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no

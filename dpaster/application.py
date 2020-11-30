@@ -39,16 +39,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         with open(CONF_PATH, "r") as conf_file:
             options = json.load(conf_file)
     except FileNotFoundError:
-        Path.mkdir(CONF_PATH.parent, exist_ok=True)
-        with open(CONF_PATH, "w") as conf_file:
-            options = {
-                "enable-cp": False,
-                "enable-raw": False,
-                "default-syntax": None,
-                "default-expires": None,
-            }
-            print("in with")
-            json.dump(options, conf_file)
+        _create_default_config()
 
     content = file.read()
 
@@ -57,10 +48,8 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         data={
             "title": title,
             "content": content,
-            "syntax": (
-                syntax or options.get("default-syntax") or get_syntax(file.name, content)
-            ),
-            "expiry_days": expires or options.get("default-expires"),
+            "syntax": (syntax or options.get("syntax") or get_syntax(file.name, content)),
+            "expiry_days": expires or options.get("expires"),
         },
     )
 
@@ -68,52 +57,80 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
 
     url: str = req.text.strip()
 
-    if raw or options.get("enable-raw"):
+    if raw or options.get("raw"):
         url += ".txt"
 
     click.echo(url)
 
-    if copy or options["enable-cp"]:
+    if copy or options["autocp"]:
         pyperclip.copy(url)
 
 
-@cli.command(aliases=["c"])
-@click.option("--show", is_flag=True, help="Show current settings")
-@click.option("--enable-cp/--disable-cp", default=None, help="Copy the URL to clipboard")
-@click.option("--enable-raw/--disable-raw", default=None, help="Always get raw URL")
-@click.option("--default-syntax", help="Default syntax")
-@click.option("--default-expires", help="Default expiry time in days", type=int)
-def config(
-    show: bool,
-    enable_cp: Optional[bool],
-    enable_raw: Optional[bool],
-    default_syntax: Optional[str],
-    default_expires: Optional[int],
-) -> None:
+@cli.group(aliases=["c"])
+def config() -> None:
     """
     Configure available settings
     """
-    if show:
+
+
+@config.command()
+def show():
+    try:
         with open(CONF_PATH, "r") as conf_file:
             options = json.load(conf_file)
         for key, value in options.items():
             click.echo("{}: {}".format(key, value))
-        return None
+    except FileNotFoundError:
+        _create_default_config()
 
-    if all(x is None for x in {enable_cp, enable_raw, default_syntax, default_expires}):
-        click.echo("Try 'dpaster config --help' for help")
-        return None
-
+@config.command()
+@click.option("--autocp", type=bool, required=False)
+@click.option("--raw", type=bool, required=False)
+@click.option("--syntax", type=str, required=False)
+@click.option("--expires", type=int, required=False)
+def add(
+    autocp: Optional[bool],
+    raw: Optional[bool],
+    syntax: Optional[str],
+    expires: Optional[int],
+):
     with open(CONF_PATH, "r") as conf_file:
         options = json.load(conf_file)
         for name, value in {
-            "enable-cp": enable_cp,
-            "enable-raw": enable_raw,
-            "default-syntax": default_syntax,
-            "default-expires": default_expires,
+            "autocp": autocp,
+            "raw": raw,
+            "syntax": syntax,
+            "expires": expires,
         }.items():
             if value is not None:
                 options[name] = value
+
+    with open(CONF_PATH, "w") as conf_file:
+        json.dump(options, conf_file)
+
+
+@config.command()
+@click.option("--autocp", required=False, is_flag=True)
+@click.option("--raw", required=False, is_flag=True)
+@click.option("--syntax", required=False, is_flag=True)
+@click.option("--expires", required=False, is_flag=True)
+def rm(
+    autocp: Optional[str],
+    raw: Optional[str],
+    syntax: Optional[str],
+    expires: Optional[str],
+):
+    with open(CONF_PATH, "r") as conf_file:
+        options = json.load(conf_file)
+
+    for name, value in {
+        "autocp": autocp,
+        "raw": raw,
+        "syntax": syntax,
+        "expires": expires,
+    }.items():
+        if value:
+            options[name] = None
 
     with open(CONF_PATH, "w") as conf_file:
         json.dump(options, conf_file)
@@ -134,3 +151,15 @@ def get_syntax(filename: str, content: str) -> str:
     with open(syntaxes_path, "r") as f:
         syntaxes = json.load(f)
     return syntaxes.get(syntax.name, "text")
+
+
+def _create_default_config():
+    Path.mkdir(CONF_PATH.parent, exist_ok=True)
+    with open(CONF_PATH, "w") as conf_file:
+        options = {
+            "autocp": False,
+            "raw": False,
+            "syntax": None,
+            "expires": None,
+        }
+        json.dump(options, conf_file)

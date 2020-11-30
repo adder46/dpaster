@@ -33,10 +33,21 @@ def config(monkeypatch, tmp_path):
 @pytest.fixture
 def default_options(config):
     options = {
-        "enable-raw": False,
-        "enable-autocp": False,
-        "default-lexer": None,
-        "default-expires": None,
+        "raw": False,
+        "autocp": False,
+        "syntax": None,
+        "expires": None,
+    }
+    with open(config, "w") as f:
+        json.dump(options, f)
+
+@pytest.fixture
+def random_options(config):
+    options = {
+        "raw": True,
+        "autocp": True,
+        "syntax": "python",
+        "expires": 10,
     }
     with open(config, "w") as f:
         json.dump(options, f)

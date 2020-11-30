@@ -4,39 +4,57 @@ from click.testing import CliRunner
 import pytest
 
 from dpaster import application
-from tests.fixtures import config, default_options  # pylint: disable=unused-import
+from tests.fixtures import (
+    config,
+    default_options,
+    random_options,
+)
 
 
 @pytest.mark.parametrize(
     "option, value",
     [
-        ["--enable-cp", True],
-        ["--enable-raw", True],
-        ["--default-expires", 10],
-        ["--default-syntax", "python"],
+        ["--autocp", True],
+        ["--raw", True],
+        ["--expires", 10],
+        ["--syntax", "python"],
     ],
 )
-def test_config_setting_options(option, value, config, default_options):
+def test_config_add(option, value, config, default_options):
     runner = CliRunner()
-    runner.invoke(
-        application.config,
-        [option] + [value] if not isinstance(value, bool) else [option],
-    )
+    runner.invoke(application.add, [option, value])
     with open(config, "r") as f:
         options = json.load(f)
     assert options[option[2:]] == value
 
 
+@pytest.mark.parametrize(
+    "option",
+    [
+        "--autocp",
+        "--raw",
+        "--expires",
+        "--syntax",
+    ],
+)
+def test_config_rm(option, config, random_options):
+    runner = CliRunner()
+    runner.invoke(application.rm, [option])
+    with open(config, "r") as f:
+        options = json.load(f)
+    assert options[option[2:]] is None
+
+
 def test_config_no_arguments():
     runner = CliRunner()
     result = runner.invoke(application.config, [])
-    assert result.output == "Try 'dpaster config --help' for help\n"
+    assert "Usage: config [OPTIONS] COMMAND [ARGS]" in result.output
 
 
 def test_config_show(config, default_options):
     runner = CliRunner()
-    result = runner.invoke(application.config, ["--show"])
-    assert "enable-raw: False" in result.output
-    assert "enable-autocp: False" in result.output
-    assert "default-lexer: None" in result.output
-    assert "default-expires: None" in result.output
+    result = runner.invoke(application.show, [])
+    assert "raw: False" in result.output
+    assert "autocp: False" in result.output
+    assert "syntax: None" in result.output
+    assert "expires: None" in result.output

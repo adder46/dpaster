@@ -2,7 +2,7 @@ import random
 import string
 
 from dpaster import application
-from tests.fixtures import python_code  # pylint: disable=unused-import
+from tests.fixtures import python_code
 
 
 def test_get_syntax_stdin(python_code):

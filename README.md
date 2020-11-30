@@ -30,17 +30,37 @@ Commands:
 
 ```
 $ dpaster config --help
-Usage: dpaster config [OPTIONS]
+Usage: dpaster config [OPTIONS] COMMAND [ARGS]...
 
   Configure available settings
 
 Options:
-  --show                        Show current settings
-  --enable-cp / --disable-cp    Copy the URL to clipboard
-  --enable-raw / --disable-raw  Always get raw URL
-  --default-syntax TEXT         Default syntax
-  --default-expires INTEGER     Default expiry time in days
-  --help                        Show this message and exit.
+  --help  Show this message and exit.
+
+Commands:
+  add
+  rm
+  show
+
+$ dpaster config add --help
+Usage: dpaster config add [OPTIONS]
+
+Options:
+  --autocp BOOLEAN
+  --raw BOOLEAN
+  --syntax TEXT
+  --expires INTEGER
+  --help             Show this message and exit.
+
+$ dpaster config rm --help
+Usage: dpaster config rm [OPTIONS]
+
+Options:
+  --autocp
+  --raw
+  --syntax
+  --expires
+  --help     Show this message and exit.
 ```
 
 ## Development

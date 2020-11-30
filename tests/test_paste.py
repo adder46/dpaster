@@ -1,5 +1,3 @@
-# pylint: disable=unused-import
-
 import pathlib
 
 from click.testing import CliRunner
