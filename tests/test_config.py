@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from click.testing import CliRunner
 import pytest
@@ -58,3 +59,8 @@ def test_config_show(config, default_options):
     assert "autocp: False" in result.output
     assert "syntax: None" in result.output
     assert "expires: None" in result.output
+
+def test_config_file_creation(config):
+    runner = CliRunner()
+    runner.invoke(application.show, [])
+    assert Path(config).exists()
