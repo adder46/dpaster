@@ -30,7 +30,7 @@ black = "^20.8b1"
 tox-ini-fmt = "^0.5.0"
 
 [tool.pytest.ini_options]
-addopts = "--cov=dpaster"
+addopts = "--cov=dpaster --cov-report=xml"
 testpaths = [
     "tests",
 ]
