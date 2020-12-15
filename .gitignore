@@ -60,9 +60,6 @@ venv.bak/
 *input.txt
 *travis.log
 
-# poetry
-*.lock
-
 # vs code
 .vscode/
 

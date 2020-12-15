@@ -14,7 +14,7 @@ readme = "README.md"
 dpaster = "dpaster.application:cli"
 
 [tool.poetry.dependencies]
-python = ">=3.6,<4"
+python = "^3.6"
 pyperclip = "^1.8.1"
 requests = "^2.25.0"
 click-aliases = "^1.0.1"
