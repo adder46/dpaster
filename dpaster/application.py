@@ -39,7 +39,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         with open(CONF_PATH, "r") as conf_file:
             options = json.load(conf_file)
     except FileNotFoundError:
-        _create_default_config()
+        options = _create_default_config()
 
     content = file.read()
 
@@ -163,3 +163,4 @@ def _create_default_config():
             "expires": None,
         }
         json.dump(options, conf_file)
+    return options
