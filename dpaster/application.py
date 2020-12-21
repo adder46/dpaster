@@ -43,7 +43,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
 
     content = file.read()
 
-    req = requests.post(
+    r = requests.post(
         "http://dpaste.com/api/v2/",
         data={
             "title": title,
@@ -53,9 +53,9 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         },
     )
 
-    req.raise_for_status()
+    r.raise_for_status()
 
-    url: str = req.text.strip()
+    url: str = r.text.strip()
 
     if raw or options.get("raw"):
         url += ".txt"
