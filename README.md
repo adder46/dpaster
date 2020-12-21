@@ -4,6 +4,8 @@
 
 **dpaster** is a command-line client interface for [dpaste](https://dpaste.com/).
 
+Since I caught myself often needing to share code or output of some command in a pastebin, I wrote dpaster to help me with that process and lift some of the burdens from my back. It reads from stdin by default if no file argument is passed, which means it perfectly fits in a UNIX pipeline. It is configurable and easy to use.
+
 ## Installation
 
 This package depends on the latest version of click, which is not released yet, so it's best to clone the repo and install it with poetry.
