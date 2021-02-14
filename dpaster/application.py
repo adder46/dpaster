@@ -19,9 +19,9 @@ CONF_PATH = Path('~/.config').expanduser() / 'dpaster' / 'dpaster.conf'
 @click.pass_context
 @click.version_option(__version__)
 def cli(ctx: click.Context) -> None:  # pylint: disable=unused-argument
-    '''
+    """
     Client interface for https://dpaste.com/ pastebin
-    '''
+    """
 
 
 @cli.command(aliases=['p'])
@@ -32,9 +32,9 @@ def cli(ctx: click.Context) -> None:  # pylint: disable=unused-argument
 @click.option('--copy', '-c', is_flag=True, help='Copy URL to clipboard', required=False)
 @click.argument('file', type=click.File('r'), default='-', required=False)
 def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool) -> None:
-    '''
+    """
     Paste to dpaste.com
-    '''
+    """
     try:
         with open(CONF_PATH, 'r') as conf_file:
             options = json.load(conf_file)
@@ -68,9 +68,9 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
 
 @cli.group(aliases=['c'])
 def config() -> None:
-    '''
+    """
     Configure available settings
-    '''
+    """
 
 
 @config.command()
