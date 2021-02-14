@@ -48,7 +48,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         data={
             'title': title,
             'content': content,
-            'syntax': (syntax or options.get('syntax') or get_syntax(file.name, content)),
+            'syntax': syntax or options.get('syntax') or get_syntax(file.name, content),
             'expiry_days': expires or options.get('expires'),
         },
     )
