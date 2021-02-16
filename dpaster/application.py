@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import IO, Dict, Optional, Union
+from typing import IO, Any, Dict, Optional
 
 import click
 import click_aliases
@@ -144,7 +144,7 @@ def get_syntax(filename: str, content: str) -> str:
     return syntaxes.get(syntax.name, 'text')
 
 
-def _create_default_config() -> Dict[str, Union[bool, None]]:
+def _create_default_config() -> Dict[str, Any]:
     Path.mkdir(CONFIG_PATH.parent, exist_ok=True)
     with open(CONFIG_PATH, 'w') as f:
         config = {
@@ -157,7 +157,7 @@ def _create_default_config() -> Dict[str, Union[bool, None]]:
     return config
 
 
-def _load_config() -> Dict[str, Union[bool, int, str, None]]:
+def _load_config() -> Dict[str, Any]:
     try:
         with open(CONFIG_PATH, 'r') as f:
             config = json.load(f)
@@ -166,26 +166,22 @@ def _load_config() -> Dict[str, Union[bool, int, str, None]]:
     return config
 
 
-def _save_config(config: Dict[str, Union[bool, int, str, None]]) -> None:
+def _save_config(config: Dict[str, Any]) -> None:
     if not CONFIG_PATH.parent.exists():
         CONFIG_PATH.parent.mkdir(exist_ok=True)
     with open(CONFIG_PATH, 'w') as f:
         json.dump(config, f)
 
 
-def _add_config_option(
-    config: Dict[str, Union[bool, int, str, None]], **kwargs
-) -> Dict[str, Union[bool, int, str, None]]:
+def _add_config_option(config: Dict[str, Any], **kwargs) -> Dict[str, Any]:
     for option, value in kwargs.items():
         if value is not None:
             config[option] = value
     return config
 
 
-def _rm_config_option(
-    config: Dict[str, Union[bool, int, str, None]], **kwargs
-) -> Dict[str, Union[bool, int, str, None]]:
-    for name, value in kwargs.items():
+def _rm_config_option(config: Dict[str, Any], **kwargs) -> Dict[str, Any]:
+    for option, value in kwargs.items():
         if value:
-            config[name] = None
+            config[option] = None
     return config
