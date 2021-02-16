@@ -42,6 +42,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
     if copy or config['autocp']:
         pyperclip.copy(url)
 
+
 @cli.group(aliases=['c'])
 def config() -> None:
     """
