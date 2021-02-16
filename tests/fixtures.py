@@ -26,7 +26,7 @@ class FakePyperclip:
 @pytest.fixture
 def config(monkeypatch, tmp_path):
     config_path = tmp_path / "dpaster.conf"
-    monkeypatch.setattr(application, "CONF_PATH", config_path)
+    monkeypatch.setattr(application, "CONFIG_PATH", config_path)
     return config_path
 
 

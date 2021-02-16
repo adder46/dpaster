@@ -12,7 +12,7 @@ import requests
 from dpaster import __version__
 
 
-CONF_PATH = Path('~/.config').expanduser() / 'dpaster' / 'dpaster.conf'
+CONFIG_PATH = Path('~/.config').expanduser() / 'dpaster' / 'dpaster.conf'
 
 
 @click.group(cls=click_aliases.ClickAliasedGroup)
@@ -35,12 +35,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
     """
     Paste to dpaste.com
     """
-    try:
-        with open(CONF_PATH, 'r') as conf_file:
-            options = json.load(conf_file)
-    except FileNotFoundError:
-        options = _create_default_config()
-
+    config = _load_config()
     content = file.read()
 
     r = requests.post(
@@ -48,8 +43,8 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
         data={
             'title': title,
             'content': content,
-            'syntax': syntax or options.get('syntax') or get_syntax(file.name, content),
-            'expiry_days': expires or options.get('expires'),
+            'syntax': syntax or config.get('syntax') or get_syntax(file.name, content),
+            'expiry_days': expires or config.get('expires'),
         },
     )
 
@@ -57,35 +52,37 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
 
     url: str = r.text.strip()
 
-    if raw or options.get('raw'):
+    if raw or config.get('raw'):
         url += '.txt'
 
     click.echo(url)
 
-    if copy or options['autocp']:
+    if copy or config['autocp']:
         pyperclip.copy(url)
 
 
 @cli.group(aliases=['c'])
 def config() -> None:
     """
-    Configure available settings
+    Configure available config
     """
 
 
 @config.command()
-def show():
+def show() -> None:
     try:
-        with open(CONF_PATH, 'r') as conf_file:
-            options = json.load(conf_file)
-        for key, value in options.items():
-            click.echo('{}: {}'.format(key, value))
+        with open(CONFIG_PATH, 'r') as f:
+            config = json.load(f)
     except FileNotFoundError:
-        _create_default_config()
+        config = _create_default_config()
+    finally:
+        for option, value in config.items():
+            click.echo('{}: {}'.format(option, value))
+
 
 @config.command()
-@click.option('--autocp', type=bool, required=False)
-@click.option('--raw', type=bool, required=False)
+@click.option('--autocp', type=bool, required=False, is_flag=True)
+@click.option('--raw', type=bool, required=False, is_flag=True)
 @click.option('--syntax', type=str, required=False)
 @click.option('--expires', type=int, required=False)
 def add(
@@ -93,20 +90,18 @@ def add(
     raw: Optional[bool],
     syntax: Optional[str],
     expires: Optional[int],
-):
-    with open(CONF_PATH, 'r') as conf_file:
-        options = json.load(conf_file)
-        for name, value in {
+) -> None:
+    config = _load_config()
+    config = _add_config_option(
+        config,
+        **{
             'autocp': autocp,
             'raw': raw,
             'syntax': syntax,
             'expires': expires,
-        }.items():
-            if value is not None:
-                options[name] = value
-
-    with open(CONF_PATH, 'w') as conf_file:
-        json.dump(options, conf_file)
+        }
+    )
+    _save_config(config)
 
 
 @config.command()
@@ -115,26 +110,22 @@ def add(
 @click.option('--syntax', required=False, is_flag=True)
 @click.option('--expires', required=False, is_flag=True)
 def rm(
-    autocp: Optional[str],
-    raw: Optional[str],
-    syntax: Optional[str],
-    expires: Optional[str],
-):
-    with open(CONF_PATH, 'r') as conf_file:
-        options = json.load(conf_file)
-
-    for name, value in {
-        'autocp': autocp,
-        'raw': raw,
-        'syntax': syntax,
-        'expires': expires,
-    }.items():
-        if value:
-            options[name] = None
-
-    with open(CONF_PATH, 'w') as conf_file:
-        json.dump(options, conf_file)
-
+    autocp: Optional[bool],
+    raw: Optional[bool],
+    syntax: Optional[bool],
+    expires: Optional[bool],
+) -> None:
+    config = _load_config()
+    config = _rm_config_option(
+        config,
+        **{
+            'autocp': autocp,
+            'raw': raw,
+            'syntax': syntax,
+            'expires': expires,
+        }
+    )
+    _save_config(config)
 
 def get_syntax(filename: str, content: str) -> str:
     if filename != '<stdin>':
@@ -154,13 +145,47 @@ def get_syntax(filename: str, content: str) -> str:
 
 
 def _create_default_config() -> Dict[str, Union[bool, None]]:
-    Path.mkdir(CONF_PATH.parent, exist_ok=True)
-    with open(CONF_PATH, 'w') as conf_file:
-        options = {
+    Path.mkdir(CONFIG_PATH.parent, exist_ok=True)
+    with open(CONFIG_PATH, 'w') as f:
+        config = {
             'autocp': False,
             'raw': False,
             'syntax': None,
             'expires': None,
         }
-        json.dump(options, conf_file)
-    return options
+        json.dump(config, f)
+    return config
+
+
+def _load_config() -> Dict[str, Union[bool, int, str, None]]:
+    try:
+        with open(CONFIG_PATH, 'r') as f:
+            config = json.load(f)
+    except FileNotFoundError:
+        config = _create_default_config()
+    return config
+
+
+def _save_config(config: Dict[str, Union[bool, int, str, None]]) -> None:
+    if not CONFIG_PATH.parent.exists():
+        CONFIG_PATH.parent.mkdir(exist_ok=True)
+    with open(CONFIG_PATH, 'w') as f:
+        json.dump(config, f)
+
+
+def _add_config_option(
+    config: Dict[str, Union[bool, int, str, None]], **kwargs
+) -> Dict[str, Union[bool, int, str, None]]:
+    for option, value in kwargs.items():
+        if value is not None:
+            config[option] = value
+    return config
+
+
+def _rm_config_option(
+    config: Dict[str, Union[bool, int, str, None]], **kwargs
+) -> Dict[str, Union[bool, int, str, None]]:
+    for name, value in kwargs.items():
+        if value:
+            config[name] = None
+    return config

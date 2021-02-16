@@ -1,4 +1,4 @@
-from dpaster.application import paste
+from dpaster.application import cli
 
 if __name__ == "__main__":
-    paste()  # pylint: disable=no-value-for-parameter
+    cli()  # pylint: disable=no-value-for-parameter

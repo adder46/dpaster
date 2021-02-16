@@ -23,7 +23,10 @@ from tests.fixtures import (
 )
 def test_config_add(option, value, config, default_options):
     runner = CliRunner()
-    runner.invoke(application.add, [option, value])
+    runner.invoke(
+        application.add,
+        [option, value] if not isinstance(value, bool) else [option]
+    )
     with open(config, "r") as f:
         options = json.load(f)
     assert options[option[2:]] == value
