@@ -3,7 +3,9 @@ import textwrap
 
 import pytest
 
-from dpaster import application
+from dpaster import cli
+from dpaster import config as config_
+from dpaster import paste
 
 
 class FakeRequests:
@@ -26,7 +28,7 @@ class FakePyperclip:
 @pytest.fixture
 def config(monkeypatch, tmp_path):
     config_path = tmp_path / "dpaster.conf"
-    monkeypatch.setattr(application, "CONFIG_PATH", config_path)
+    monkeypatch.setattr(config_, "CONFIG_PATH", config_path)
     return config_path
 
 
@@ -55,12 +57,12 @@ def random_options(config):
 
 @pytest.fixture
 def fake_requests(monkeypatch):
-    monkeypatch.setattr(application, "requests", FakeRequests())
+    monkeypatch.setattr(paste, "requests", FakeRequests())
 
 
 @pytest.fixture
 def fake_pyperclip(monkeypatch):
-    monkeypatch.setattr(application, "pyperclip", FakePyperclip())
+    monkeypatch.setattr(cli, "pyperclip", FakePyperclip())
 
 
 @pytest.fixture

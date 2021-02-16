@@ -1,16 +1,11 @@
-import pathlib
+from pathlib import Path
 
-from click.testing import CliRunner
 import pytest
+from click.testing import CliRunner
 
-from dpaster import application
-from tests.fixtures import (
-    config,
-    default_options,
-    fake_requests,
-    fake_pyperclip,
-    python_code,
-)
+from dpaster import cli
+from tests.fixtures import (config, default_options, fake_pyperclip,
+                            fake_requests, python_code)
 
 
 @pytest.mark.parametrize(
@@ -36,7 +31,7 @@ from tests.fixtures import (
 )
 def test_paste(arguments, config, default_options, fake_requests, fake_pyperclip):
     runner = CliRunner()
-    result = runner.invoke(application.paste, arguments, input="spameggs")
+    result = runner.invoke(cli.paste, arguments, input="spameggs")
     if "--raw" in arguments:
         assert ".txt" in result.output
     else:
@@ -45,5 +40,5 @@ def test_paste(arguments, config, default_options, fake_requests, fake_pyperclip
 
 def test_paste_config_file_creation(config):
     runner = CliRunner()
-    runner.invoke(application.paste, ["--syntax", "java"])
-    assert pathlib.Path(config).exists()
+    runner.invoke(cli.paste, ["--syntax", "java"])
+    assert Path(config).exists()
