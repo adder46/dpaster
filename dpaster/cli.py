@@ -10,7 +10,7 @@ from dpaster.config import (
     add_config_options,
     load_config,
     rm_config_options,
-    save_config
+    save_config,
 )
 from dpaster.paste import paste_to_dpaste
 
