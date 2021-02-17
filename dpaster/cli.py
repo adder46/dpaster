@@ -12,7 +12,7 @@ from dpaster.config import (
     rm_config_options,
     save_config
 )
-from dpaster.paste import dpaste
+from dpaster.paste import paste_to_dpaste
 
 
 @click.group(cls=click_aliases.ClickAliasedGroup)
@@ -37,7 +37,7 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
     """
     args = (file, syntax, expires, title, raw, copy)
     config = load_config()
-    url = dpaste(config, *args)
+    url = paste_to_dpaste(config, *args)
     click.echo(url)
     if copy or config['autocp']:
         pyperclip.copy(url)

@@ -6,33 +6,34 @@ from typing import Any, Dict
 CONFIG_PATH = Path('~/.config').expanduser() / 'dpaster' / 'dpaster.conf'
 
 
-def create_default_config() -> Dict[str, Any]:
-    Path.mkdir(CONFIG_PATH.parent, exist_ok=True)
-    with open(CONFIG_PATH, 'w') as f:
-        config = {
-            'autocp': False,
-            'raw': False,
-            'syntax': None,
-            'expires': None,
-        }
-        json.dump(config, f)
-    return config
-
-
 def load_config() -> Dict[str, Any]:
     try:
         with open(CONFIG_PATH, 'r') as f:
-            config = json.load(f)
+            return json.load(f)
     except FileNotFoundError:
-        config = create_default_config()
+        return create_default_config()
+
+
+def create_default_config() -> Dict[str, Any]:
+    config = {
+        'autocp': False,
+        'raw': False,
+        'syntax': None,
+        'expires': None,
+    }
+    save_config(config)
     return config
 
 
 def save_config(config: Dict[str, Any]) -> None:
-    if not CONFIG_PATH.parent.exists():
-        CONFIG_PATH.parent.mkdir(exist_ok=True)
+    _ensure_config_folder()
     with open(CONFIG_PATH, 'w') as f:
         json.dump(config, f)
+
+
+def _ensure_config_folder() -> None:
+    if not CONFIG_PATH.parent.exists():
+        CONFIG_PATH.parent.mkdir(exist_ok=True)
 
 
 def add_config_options(config: Dict[str, Any], **kwargs) -> Dict[str, Any]:

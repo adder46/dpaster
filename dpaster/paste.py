@@ -3,7 +3,7 @@ import requests
 from dpaster.util import get_syntax
 
 
-def dpaste(
+def paste_to_dpaste(
     config: Dict[str, Any],
     file: IO,
     syntax: str,
@@ -13,6 +13,7 @@ def dpaste(
     copy: bool
 ) -> str:
     content = file.read()
+
     r = requests.post(
         'http://dpaste.com/api/v2/',
         data={
@@ -23,7 +24,9 @@ def dpaste(
         },
     )
     r.raise_for_status()
+
     url: str = r.text.strip()
     if raw or config.get('raw'):
         url += '.txt'
+
     return url
