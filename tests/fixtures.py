@@ -3,9 +3,11 @@ import textwrap
 
 import pytest
 
-from dpaster import cli
-from dpaster import config as config_
-from dpaster import paste
+from dpaster import (
+    cli,
+    config,
+    paste,
+)
 
 
 class FakeRequests:
@@ -26,32 +28,33 @@ class FakePyperclip:
 
 
 @pytest.fixture
-def config(monkeypatch, tmp_path):
-    config_path = tmp_path / "dpaster.conf"
-    monkeypatch.setattr(config_, "CONFIG_PATH", config_path)
-    return config_path
+def config_path(monkeypatch, tmp_path):
+    path = tmp_path / "dpaster.conf"
+    monkeypatch.setattr(config, "CONFIG_PATH", path)
+    return path
 
 
 @pytest.fixture
-def default_options(config):
+def default_options(config_path):
     options = {
         "raw": False,
         "autocp": False,
         "syntax": None,
         "expires": None,
     }
-    with open(config, "w") as f:
+    with open(config_path, "w") as f:
         json.dump(options, f)
 
+
 @pytest.fixture
-def random_options(config):
+def random_options(config_path):
     options = {
         "raw": True,
         "autocp": True,
         "syntax": "python",
         "expires": 10,
     }
-    with open(config, "w") as f:
+    with open(config_path, "w") as f:
         json.dump(options, f)
 
 

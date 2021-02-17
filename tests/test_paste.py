@@ -4,8 +4,13 @@ import pytest
 from click.testing import CliRunner
 
 from dpaster import cli
-from tests.fixtures import (config, default_options, fake_pyperclip,
-                            fake_requests, python_code)
+from tests.fixtures import (
+    config_path,
+    default_options,
+    fake_pyperclip,
+    fake_requests,
+    python_code,
+)
 
 
 @pytest.mark.parametrize(
@@ -29,7 +34,7 @@ from tests.fixtures import (config, default_options, fake_pyperclip,
         ],
     ],
 )
-def test_paste(arguments, config, default_options, fake_requests, fake_pyperclip):
+def test_paste(arguments, config_path, default_options, fake_requests, fake_pyperclip):
     runner = CliRunner()
     result = runner.invoke(cli.paste, arguments, input="spameggs")
     if "--raw" in arguments:
@@ -38,7 +43,7 @@ def test_paste(arguments, config, default_options, fake_requests, fake_pyperclip
         assert "dpaste" in result.output
 
 
-def test_paste_config_file_creation(config):
+def test_paste_config_file_creation(config_path):
     runner = CliRunner()
     runner.invoke(cli.paste, ["--syntax", "java"])
-    assert Path(config).exists()
+    assert config_path.exists()

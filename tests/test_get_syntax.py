@@ -22,7 +22,11 @@ def test_get_syntax_weird_content():
     content = "".join(
         ch
         for ch in [
-            random.choice(string.ascii_letters + string.digits + r"!@#$%^&*()_+-=[]{}\/")
+            random.choice(
+                string.ascii_letters
+                + string.digits
+                + r"!@#$%^&*()_+-=[]{}\/"
+            )
             for _ in range(100)
         ]
     )

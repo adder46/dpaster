@@ -28,5 +28,4 @@ def paste_to_dpaste(
     url: str = r.text.strip()
     if raw or config.get('raw'):
         url += '.txt'
-
     return url
