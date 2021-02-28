@@ -5,8 +5,7 @@ import pytest
 
 from dpaster import (
     cli,
-    config,
-    paste,
+    core,
 )
 
 
@@ -30,7 +29,7 @@ class FakePyperclip:
 @pytest.fixture
 def config_path(monkeypatch, tmp_path):
     path = tmp_path / "dpaster.conf"
-    monkeypatch.setattr(config, "CONFIG_PATH", path)
+    monkeypatch.setattr(core, "CONFIG_PATH", path)
     return path
 
 
@@ -60,7 +59,7 @@ def random_options(config_path):
 
 @pytest.fixture
 def fake_requests(monkeypatch):
-    monkeypatch.setattr(paste, "requests", FakeRequests())
+    monkeypatch.setattr(core, "requests", FakeRequests())
 
 
 @pytest.fixture

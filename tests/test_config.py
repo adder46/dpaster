@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from click.testing import CliRunner
 
-from dpaster import cli, config
+from dpaster import cli, core
 from tests.fixtures import (
     config_path,
     default_options,
@@ -66,5 +66,5 @@ def test_config_show(config_path, default_options):
 
 def test_ensure_config_folder(config_path):
     config_path.parent.rmdir()
-    config._ensure_config_folder()  # pylint: disable=protected-access
+    core._ensure_config_folder()  # pylint: disable=protected-access
     assert config_path.parent.exists()

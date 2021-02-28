@@ -1,20 +1,20 @@
 import random
 import string
 
-from dpaster import util
+from dpaster import core
 from tests.fixtures import python_code
 
 
 def test_get_syntax_stdin(python_code):
-    assert "python" in util.get_syntax("<stdin>", python_code)
+    assert "python" in core.get_syntax("<stdin>", python_code)
 
 
 def test_get_syntax_java_file():
-    assert util.get_syntax("HelloWorld.java", "") == "java"
+    assert core.get_syntax("HelloWorld.java", "") == "java"
 
 
 def test_get_syntax_weird_filename():
-    assert util.get_syntax("main.cthulhu", "") == "text"
+    assert core.get_syntax("main.cthulhu", "") == "text"
 
 
 def test_get_syntax_weird_content():
@@ -30,4 +30,4 @@ def test_get_syntax_weird_content():
             for _ in range(100)
         ]
     )
-    assert util.get_syntax("<stdin>", content) == "text"
+    assert core.get_syntax("<stdin>", content) == "text"

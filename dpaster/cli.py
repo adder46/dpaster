@@ -5,14 +5,14 @@ import click_aliases
 import pyperclip
 
 from dpaster import __version__
-from dpaster.config import (
+from dpaster.core import (
     CONFIG_PATH,
     add_config_options,
     load_config,
+    paste_to_dpaste,
     rm_config_options,
     save_config,
 )
-from dpaster.paste import paste_to_dpaste
 
 
 @click.group(cls=click_aliases.ClickAliasedGroup)
