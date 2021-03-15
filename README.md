@@ -4,12 +4,11 @@
 
 **dpaster** is a command-line client interface for [dpaste](https://dpaste.com/).
 
-Since I caught myself often needing to share code or output of some command in a pastebin, I wrote dpaster to help me with that process and lift some of the burdens from my back. It reads from stdin by default if no file argument is passed, which means it perfectly fits in a UNIX pipeline. It is configurable and easy to use.
+Since I caught myself often needing to share code or output of some command in a pastebin, I wrote dpaster to help me with that process and lift some of the burdens from my back. It reads from stdin by default if no file argument is passed, which means it perfectly fits a UNIX-style workflow. It is configurable and easy to use.
 
 ## Installation
 
-This package depends on the latest version of click, which is not released yet, so it's best to clone the repo and install it with poetry.
-When the new version of click is released, **dpaster** will be available as a package on PyPI, too.
+This package depends on the latest version of click, which is not released yet, so it's best to clone the repo and install it with poetry. When the new version of click is released, **dpaster** will be available as a package on PyPI, too.
 
 ## Usage
 
@@ -26,6 +25,57 @@ Options:
 Commands:
   config (c)  Configure available settings
   paste (p)   Paste to dpaste.com
+```
+
+---
+
+## Examples
+
+As I just mentioned, by default, dpaster expects its input to come from stdin. If that is not happening, it expects a file argument to be passed. This makes it a nicely suited to the well-known UNIX-style workflow. For example:
+
+**Pipes**
+
+```
+$ echo 'Salut, le monde!' | dpaster p
+http://dpaste.com/7MKG8KYRB
+```
+
+**Heredocs**
+
+```sh
+$ dpaster p << EOF
+> Computers, be nice.
+> EOF
+http://dpaste.com/32U8TT4EZ
+```
+
+**Sending EOF character with Ctrl + D**:
+
+```sh
+$ dpaster p
+Hola mundo!
+http://dpaste.com/CKY455TRH
+```
+
+**Herestrings**
+
+```sh
+$ dpaster p <<< 'Computers, be nice'
+http://dpaste.com/4GEDL3FFY
+```
+
+**Input redirection**
+
+```sh
+$ dpaster p < spam.txt 
+http://dpaste.com/3T28AL4BK
+```
+
+**Process substitution**
+
+```sh
+$ dpaster p <(head -n 1 spam.txt)
+http://dpaste.com/CGQGNG4NU
 ```
 
 ## Configuring
