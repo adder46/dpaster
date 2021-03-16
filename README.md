@@ -49,19 +49,19 @@ $ dpaster p << EOF
 http://dpaste.com/32U8TT4EZ
 ```
 
+**Herestrings**
+
+```sh
+$ dpaster p <<< 'Computers, be nice'
+http://dpaste.com/4GEDL3FFY
+```
+
 **Sending EOF character with Ctrl + D**:
 
 ```sh
 $ dpaster p
 Hola mundo!
 http://dpaste.com/CKY455TRH
-```
-
-**Herestrings**
-
-```sh
-$ dpaster p <<< 'Computers, be nice'
-http://dpaste.com/4GEDL3FFY
 ```
 
 **Input redirection**
