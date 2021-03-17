@@ -2,6 +2,7 @@ from typing import IO, Optional
 
 import click
 import click_aliases
+import click_spinner
 import pyperclip
 
 from dpaster import __version__
@@ -37,7 +38,8 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
     """
     args = (file, syntax, expires, title, raw, copy)
     config = load_config()
-    url = paste_to_dpaste(config, *args)
+    with click_spinner.spinner():
+        url = paste_to_dpaste(config, *args)
     click.echo(url)
     if copy or config['autocp']:
         pyperclip.copy(url)
