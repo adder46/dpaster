@@ -1,3 +1,4 @@
+import sys
 from typing import IO, Optional
 
 import click
@@ -38,9 +39,15 @@ def paste(file: IO, syntax: str, expires: int, title: str, raw: bool, copy: bool
     """
     args = (file, syntax, expires, title, raw, copy)
     config = load_config()
-    with click_spinner.spinner():
+
+    if sys.stdin.isatty() and file.name == '<stdin>':
         url = paste_to_dpaste(config, *args)
+    else:
+        with click_spinner.spinner():
+            url = paste_to_dpaste(config, *args)
+
     click.echo(url)
+
     if copy or config['autocp']:
         pyperclip.copy(url)
 
